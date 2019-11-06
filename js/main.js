@@ -1,19 +1,20 @@
 (function() {
     'use strict';
+    var mapa = document.querySelector('#mapa');
+    if(mapa) {
+        var map = L.map('map').setView([51.505, -0.09], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    L.marker([51.5, -0.09]).addTo(map)
+        .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+        .openPopup();
+    }
 
     var regalo = document.getElementById("regalo");
     document.addEventListener('DOMContentLoaded', function(){
-
-        var map = L.map('mapa').setView([40.423951, -3.713379], 16);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        L.marker([40.423951, -3.713379]).addTo(map)
-            .bindPopup('GDLWebCamp 2018 <br> Boletos ya disponibles')
-            .openPopup()
-            .openTooltip();
 
         //Campos usuario
         var nombre = document.getElementById("nombre");
@@ -35,6 +36,10 @@
         var etiquetas = document.getElementById("etiquetas");
         var camisas = document.getElementById("camisa_evento");
 
+
+        if(document.getElementById("calcular")) {
+
+        
         calcular.addEventListener("click", calcularMontos);
 
         pase_dia.addEventListener("blur", mostrarDias);
@@ -129,5 +134,65 @@
                 document.getElementById(diasElegidos[i]).style.display ="block";
             }
         }
+    }
     }); //DOM CONTENT LOADED
 })();
+
+
+
+$(function(){
+    
+    //  Lettering
+    $(".nombre-sitio").lettering();
+
+    //Menu  fijo  
+    var windowHeight = $(window).height();
+    var barraAltura = $(".barra").innerHeight(true);
+
+
+    $(window).scroll(function(){
+        var scroll =  $(window).scrollTop();
+        if(scroll > windowHeight)  {
+            $(".barra").addClass("fixed");
+            $("body").css({"margin-top": barraAltura+"px"})
+        } else {
+            $(".barra").removeClass("fixed");
+            $("body").css({"margin-top": "0px"})
+        }
+     //   console.log(scroll);
+    });
+    // Menu Responsiive
+
+    $(".menu-movil").on("click", function(){
+        $(".navegacion-principal").slideToggle();
+    });
+
+    //Programa de Conferenciais
+    $(".programa-evento .info-curso:first").show();
+    $(".menu-programa a:first").addClass("activo");
+
+    $(".menu-programa a").on("click", function(){
+        $(".menu-programa a").removeClass("activo");
+        $(this).addClass("activo");
+        $(".ocultar").hide();
+        var enlace = $(this).attr("href");
+        $(enlace).fadeIn(1000);
+        return false;
+    });
+
+    //Animaciones para los nuevos numeros
+
+    $(".resumen-evento li:nth-child(1) p").animateNumber({ number: 6}, 1200);
+    $(".resumen-evento li:nth-child(2) p").animateNumber({ number: 15}, 1200);
+    $(".resumen-evento li:nth-child(3) p").animateNumber({ number: 3}, 1500);
+    $(".resumen-evento li:nth-child(4) p").animateNumber({ number: 9}, 1500);
+});
+
+    //Cuenta regresiva
+
+    $(".cuenta-regresiva").countdown("2019/12/20 9:00:00", function(event){
+        $("#dias").html(event.strftime("%D"));
+        $("#horas").html(event.strftime("%H"));
+        $("#minutos").html(event.strftime("%M"));
+        $("#segundos").html(event.strftime("%S"));
+    });
